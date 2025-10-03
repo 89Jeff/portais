@@ -1,0 +1,203 @@
+/* src/pages/Login.css */
+
+/*
+  Esta é a classe do nosso container principal.
+  Ele usa `display: flex` para dividir a tela em duas colunas (a da imagem e a do formulário).
+  `height: 100vh` garante que ele ocupe 100% da altura da tela, não importa o tamanho.
+*/
+.login-page {
+  display: flex;
+  height: 100vh;
+ 
+}
+
+/*
+  Esta é a classe do container da esquerda, que tem a imagem de fundo.
+  `flex: 1` faz com que ele ocupe metade da largura da tela.
+  `background-image` define a imagem.
+  `background-size: cover` faz a imagem se esticar para preencher todo o container, sem deixar espaços.
+  `background-position: center` centraliza a imagem no container.
+  `position: relative` é necessário para posicionar a camada escura sobre a imagem.
+*/
+.login-page-image-container {
+  flex: 1;
+  background-image: url('../../src/assets/logo_fort.jpg'); /* Altere para o nome da sua imagem */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*
+  Esta é uma "pseudoclasse" que cria uma camada sobre a imagem.
+  `content: ''` cria um elemento vazio.
+  `position: absolute` e as propriedades `top`, `left`, `width` e `height` fazem ele cobrir todo o container pai.
+  `background-color` com `rgba` adiciona uma cor preta semitransparente, escurecendo a imagem para o texto `GESTÃO DE ARMAZÉM` ficar mais visível.
+*/
+.login-page-image-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/*
+  Estiliza o texto "GESTÃO DE ARMAZÉM" que fica sobre a imagem.
+  `position: relative` e `z-index: 1` garantem que o texto fique acima da camada escura.
+*/
+.title-overlay {
+  position: relative;
+  z-index: 1;
+  color: white;
+  font-size: 3em;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/*
+  Esta é a classe do container da direita, onde fica o formulário.
+  `flex: 1` faz com que ele ocupe a outra metade da tela.
+  `display: flex` e as outras propriedades centralizam o formulário verticalmente e horizontalmente.
+  `background-color` define o cinza claro que combina com a paleta do design.
+*/
+.login-page-form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f2f5;
+  padding: 20px;
+}
+
+/*
+  Estiliza a área do formulário.
+  `width` e `max-width` garantem que o formulário tenha um tamanho fixo, mas não estoure em telas pequenas.
+  `background-color: transparent` faz a área do formulário não ter um fundo branco, misturando-se com o cinza do container pai.
+*/
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: transparent;
+  padding: 40px;
+  text-align: center;
+}
+
+/* Estiliza o logo e o título do formulário. */
+.login-card .logo {
+  max-width: 150px;
+  margin-bottom: 30px;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 20px;
+}
+
+/* Estiliza o formulário e os campos de input. */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555555;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  font-size: 16px;
+  color: #333;
+  transition: box-shadow 0.3s ease; /* Transição suave para o efeito de foco. */
+}
+
+/* Estiliza o input quando ele está focado. */
+.form-group input:focus {
+  outline: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Estiliza o botão de login. */
+.login-button {
+  width: 70%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: #212529;
+  color: white;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+  margin-left: 20%;
+}
+
+.login-button:hover {
+  background-color: #343a40;
+}
+
+/* Estiliza o link "Esqueci a senha?". */
+.forgot-password {
+  text-align: right;
+  font-size: 14px;
+  color: #777777;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+  color: #007bff;
+}
+
+.forgot-password {
+    margin-right: 30%;
+}
+
+/*
+  MEDIA QUERY para telas pequenas (smartphones).
+  Quando a largura da tela é menor ou igual a 768px, as regras abaixo são aplicadas.
+  Isso faz o layout de duas colunas virar uma coluna só, empilhando os elementos.
+*/
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column; /* Muda a direção do flexbox para empilhar */
+  }
+  
+  .login-page-image-container {
+    height: 30vh; /* Define uma altura menor para a imagem */
+  }
+  
+  .login-page-form-container {
+    height: 70vh; /* Aumenta a altura da área do formulário */
+  }
+  
+  .login-card {
+    box-shadow: none; /* Remove a sombra para um visual mais limpo em mobile */
+  }
+  
+  .title-overlay {
+    font-size: 2em; /* Diminui o tamanho da fonte */
+  }
+}

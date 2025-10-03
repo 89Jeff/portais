@@ -1,0 +1,240 @@
+/* src/styles/Dashboard.css */
+
+/*
+  Define o container principal que terá o menu lateral e o conteúdo.
+  Usa flexbox para alinhar os elementos lado a lado e ocupa 100% da altura da tela.
+*/
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f0f2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/*
+  Estiliza o menu lateral (sidebar).
+  Define a largura, cor de fundo e sombra.
+  A transição suave dá um efeito profissional ao expandir/colapsar.
+*/
+.sidebar {
+  width: 250px;
+  min-width: 250px;
+  background-color: #080808;
+  color: #fff;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+  transition: width 0.3s ease-in-out, min-width 0.3s ease-in-out;
+  position: relative;
+  z-index: 100;
+}
+
+/*
+  Estilo quando o menu está colapsado.
+  Reduz a largura e o padding.
+*/
+.sidebar.collapsed {
+  width: 60px;
+  min-width: 60px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/*
+  Estilo para o botão de toggle (expandir/colapsar o menu).
+  É posicionado de forma absoluta, fora do menu, e tem uma transição suave.
+*/
+.toggle-menu-button {
+  background-color: transparent;
+  color: #0f0f0f;
+  border: none;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 15px;
+  right: -35px;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 1.5em;
+  transition: transform 0.3s ease;
+}
+
+/* Efeito de escala ao passar o mouse sobre o botão */
+.toggle-menu-button:hover {
+  transform: scale(1.1);
+}
+
+/* Estilo do título "Menu" */
+.logo-text {
+  font-size: 1.4em;
+  font-weight: 600;
+  margin: 0 0 30px;
+  text-align: center;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+  color: #fff;
+}
+
+/*
+  Esta é a regra mais importante.
+  Esconde o texto dos <span> e o logo quando o menu está colapsado.
+*/
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .menu-item span,
+.sidebar.collapsed .logout-button span {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+/*
+  Quando o menu está expandido, o texto tem um padding e uma transição para um fade-in.
+*/
+.menu-item span,
+.logout-button span {
+  opacity: 1;
+  padding-left: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Estilo da navegação (lista de links) */
+.menu-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/*
+  Estilo para cada item do menu.
+  Usa flexbox para alinhamento.
+*/
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 25px;
+  margin-bottom: 5px;
+  color: #ecf0f1;
+  text-decoration: none;
+  font-size: 1em;
+  border-left: 5px solid transparent;
+  transition: background-color 0.3s ease, color 0.3s ease, border-left-color 0.3s ease;
+}
+
+/* Efeitos de hover e para o item ativo */
+.menu-item:hover,
+.menu-item.active {
+  /*background-color: #34495e;*/
+  background-color: #686261;
+  color: #fff;
+  border-left-color: #3498db;
+}
+
+/* Tamanho do ícone nos itens de menu */
+.menu-item i {
+  font-size: 1em;
+}
+
+.menu-item span {
+  font-size: 15px;
+}
+
+/*
+  Quando o menu está colapsado, o item do menu vira um quadrado.
+  Ajusta o padding e centraliza o ícone.
+*/
+.sidebar.collapsed .menu-item,
+.sidebar.collapsed .logout-button {
+  width: 60px;
+  justify-content: center;
+  padding: 15px 0;
+  position: relative;
+}
+
+/*
+  NOVA REGRA: Adicionamos position: relative à tag <li>
+  para que o tooltip saiba onde se posicionar.
+*/
+.sidebar.collapsed li {
+  position: relative;
+}
+
+
+/*
+  Regra para o tooltip.
+  O `::after` é ativado no hover, exibindo o texto do `data-tooltip`.
+*/
+.sidebar.collapsed li:hover::after,
+.sidebar.collapsed .logout-button-wrapper:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #34495e;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 200;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 1;
+}
+
+/* Estilo do container do botão de logout */
+.logout-button-wrapper {
+  margin-top: auto;
+  position: relative;
+}
+
+/* Estilo do botão de logout */
+.logout-button {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: #ecf0f1;
+  cursor: pointer;
+  padding: 15px 25px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: background-color 0.3s ease;
+  font-size: 15px;
+}
+
+.logout-button:hover {
+  background-color: #686261;
+}
+
+/*
+  Ajusta o botão de logout para ficar centralizado quando o menu está colapsado.
+*/
+.sidebar.collapsed .logout-button {
+  justify-content: center;
+  padding: 15px 0;
+  position: relative;
+}
+
+/*
+  Área de conteúdo principal.
+  Usa `flex-grow` para ocupar o espaço restante e tem transição suave.
+*/
+.main-content {
+  flex-grow: 1;
+  padding: 40px;
+  overflow-y: auto;
+  transition: padding-left 0.3s ease-in-out;
+}
+
+/*
+  Ajusta o padding quando o menu está fechado para evitar que o conteúdo fique colado.
+*/
+.main-content.menu-closed {
+  padding-left: 60px;
+}

@@ -1,0 +1,11 @@
+.dashboard-home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.dashboard-logo {
+  max-width: 300px;
+  opacity: 0.3; /* Deixa o logo mais suave, como uma marca d'água */
+}
