@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class FormularioMedicao {
     
-     @JsonProperty("tipo_produto")
+    /*@JsonProperty("tipo_produto")
     private TipoProduto tipoProduto;
 
     @JsonProperty("andamie")
@@ -77,5 +77,5 @@ public class FormularioMedicao {
         ESQ,
         @JsonProperty("DIR")
         DIR
-    }
+    }*/
 }

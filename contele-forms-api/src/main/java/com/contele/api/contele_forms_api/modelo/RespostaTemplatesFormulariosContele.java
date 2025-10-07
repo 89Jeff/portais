@@ -5,7 +5,7 @@ import java.util.List;
 
 public class RespostaTemplatesFormulariosContele {
 
-    @JsonProperty("forms_templates")
+    /*@JsonProperty("forms_templates")
     private List<Object> formsTemplates;
 
     // Getters e Setters
@@ -15,5 +15,5 @@ public class RespostaTemplatesFormulariosContele {
 
     public void setFormsTemplates(List<Object> formsTemplates) {
         this.formsTemplates = formsTemplates;
-    }
+    }*/
 }

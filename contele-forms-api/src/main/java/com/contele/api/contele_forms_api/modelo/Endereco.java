@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Endereco {
 
-     @JsonProperty("location")
+    @JsonProperty("location")
     private Object location;
 
     @JsonProperty("neighborhood")
