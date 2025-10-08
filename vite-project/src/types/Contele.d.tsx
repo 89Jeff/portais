@@ -1,9 +1,36 @@
+// src/types/Contele.d.tsx
+
 // =========================================================================
-// INTERFACES E TIPOS DA API CONTELE
+// TIPOS GERAIS
 // =========================================================================
 
-export type TabName = 'Standard' | 'Photos' | 'Videos' | 'Observations'; // Removendo o '| ""'
+// Tipagem para as abas de resposta do Checklist
+export type TabName = 'Standard' | 'Photos' | 'Videos' | 'Observations'; 
 
+// Tipagem para as permissões usadas no PermittedRoute e Dashboard
+export type PermittedRouteProps = 'CKL' | 'PED' | string;
+
+// =========================================================================
+// INTERFACES DE AUTENTICAÇÃO (Adicionadas)
+// =========================================================================
+
+/**
+ * Interface que representa a resposta do endpoint /portal/login.
+ */
+export interface LoginResponse {
+    // Array de permissões (ex: ['CKL', 'PED'])
+    direitos: string[]; 
+    // Indicador se o usuário está bloqueado ('S' ou 'N')
+    bloqueado: 'S' | 'N';
+    // Indicador se a senha deve ser trocada ('S' ou 'N')
+    trocar_senha: 'S' | 'N';
+    // Data de validade do usuário (formato "YYYYMMDD")
+    validade: string;
+}
+
+// =========================================================================
+// INTERFACES E TIPOS DA API CONTELE (Existentes)
+// =========================================================================
 
 export interface Answer {
     id: string;
@@ -35,7 +62,7 @@ export interface Template {
 
 export interface Form {
     forms_id?: string;
-    form_title?: string; 
+    form_title?: string;
     answers: Answer[];
     template: Template;
 }

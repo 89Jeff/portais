@@ -1,4 +1,4 @@
-// vite.config.js (Versão com o Proxy Simulado)
+// vite.config.js (VERSÃO CORRIGIDA/SIMPLIFICADA)
 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -8,24 +8,26 @@ export default defineConfig({
   server: {
     proxy: {
       '/portal': {
-        target: 'https://totvs.casafortaleza.com.br:8139',
-        changeOrigin: true, // Essencial para Host Spoofing
+        // 1. Aponta para o endereço real do backend
+        target: 'https://totvs.casafortaleza.com.br:8139', 
+        
+        // 2. Essencial para que o backend veja a requisição vindo do domínio correto
+        changeOrigin: true, 
+        
+        // 3. Permite comunicação segura (HTTPS) em desenvolvimento
         secure: false, 
-        rewrite: (path) => path.replace(/^\/portal/, '/portal'),
 
+        // 4. (OPCIONAL, MAS IMPORTANTE) Mantenha o configure para forçar o HOST, que o TOTVS gosta
         configure: (proxy) => {
-          proxy.on('proxyReq', (proxyReq) => {
-            // CRÍTICO: FORÇA O HOST CORRETO
-            proxyReq.setHeader('Host', 'totvs.casafortaleza.com.br:8139');
-            // SIMULA O POSTMAN
-            proxyReq.setHeader('user-agent', 'PostmanRuntime/7.37.0');
-
-            // LIMPA HEADERS DE BROWSER QUE CONFUNDEM O BACKEND (opcional, mas recomendado)
-            proxyReq.removeHeader?.('origin');
-            proxyReq.removeHeader?.('referer');
-            // ... (remova os outros headers que você tinha listado)
-          });
+            proxy.on('proxyReq', (proxyReq) => {
+                // Força o HOST correto, ignorando o localhost:5173
+                proxyReq.setHeader('Host', 'totvs.casafortaleza.com.br:8139');
+                // Remove o header de origem que pode causar bloqueio
+                proxyReq.removeHeader?.('origin');
+            });
         },
+        
+        // 5. REMOVIDO: A linha 'rewrite' confusa
       },
     },
   },

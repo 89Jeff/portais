@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 // SEPARAÇÃO DE IMPORTS:
-import { checkPermission } from '../hooks/usePermissions'; // Importação de VALOR (função)
-import type { PermittedRouteProps } from '../hooks/usePermissions'; // Importação de TIPO
+import { checkPermission } from '../hooks/usePermissions'; 
+import type { PermittedRouteProps } from '../types/Contele.d'; // Importa o tipo da definição global
 import '../styles/Dashboard.css';
 
 const Dashboard: React.FC = () => {
