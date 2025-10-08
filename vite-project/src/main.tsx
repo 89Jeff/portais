@@ -11,7 +11,7 @@ import Dashboard from './pages/Dashboard.tsx';
 import DashboardHome from './pages/DashboardHome.tsx';
 import ConsultarPedido from './pages/ConsultarPedido.tsx';
 import ConsultarChecklist from './pages/ConsultarChecklist.tsx';
-import PermittedRoute from './components/usePermissions.tsx'; // IMPORTANTE: Importar o guarda!
+import PermittedRoute from './components/PermittedRoute.tsx'; // IMPORTANTE: Importar o guarda!
 import './index.css';
 
 // Cria o roteador com as rotas da nossa aplicação

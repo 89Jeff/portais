@@ -54,4 +54,26 @@ public class ConteleFormulariosControlador {
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
+
+    // NOVO ENDPOINT: Combina a busca da Tarefa e dos Formulários em uma única rota.
+    // Caminho completo: /api/v1/contele/formularios/totvs/{numeroTotvs}
+    @GetMapping("/formularios/totvs/{numeroTotvs}")
+    public Mono<ResponseEntity<RespostaFormulariosContele>> obterFormulariosPorNumeroTotvs(@PathVariable String numeroTotvs) {
+        // A LÓGICA DEVE SER:
+        // 1. Chamar clienteConteleFormulariosServico.obterVisitaPorNumeroTotvs(numeroTotvs) para obter a Tarefa.
+        // 2. Usar o ID da Tarefa (Tarefa.id) para chamar clienteConteleFormulariosServico.obterFormulariosPorVisita(Tarefa.id).
+        // 3. Retornar os Formulários.
+
+        // Como você está usando Reactive (Mono), a implementação seria:
+        return clienteConteleFormulariosServico.obterVisitaPorNumeroTotvs(numeroTotvs)
+                .flatMap(tarefa -> {
+                    // Após encontrar a tarefa, usamos seu ID para buscar os formulários
+                    if (tarefa != null && tarefa.getId() != null) {
+                        return clienteConteleFormulariosServico.obterFormulariosPorVisita(tarefa.getId());
+                    }
+                    return Mono.empty();
+                })
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
 }

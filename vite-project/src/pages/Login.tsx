@@ -26,9 +26,9 @@ export const getLogo = (): string => {
   return logoFort;
 };
 
-/*const toBase64 = (str: string): string => {
+const toBase64 = (str: string): string => {
  return btoa(unescape(encodeURIComponent(str)));
-};*/
+};
 
 // Componente principal da página de login
 const Login: React.FC = () => {
@@ -39,7 +39,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
 
   // Função que é executada ao enviar o formulário
-  /*const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsLoading(true);
 
@@ -117,10 +117,10 @@ const Login: React.FC = () => {
       } finally {
         setIsLoading(false);
     }
-  };*/
+  };
 
    // Função que é executada ao enviar o formulário
-   const handleSubmit = async (event: React.FormEvent) => {
+   /*const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
    setIsLoading(true);
 
@@ -217,7 +217,7 @@ const Login: React.FC = () => {
     } finally {
         setIsLoading(false);
     }
- };
+ };*/
 
 
   return (

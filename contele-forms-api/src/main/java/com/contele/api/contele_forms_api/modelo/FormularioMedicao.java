@@ -1,8 +1,8 @@
 package com.contele.api.contele_forms_api.modelo;
 
 import lombok.Data;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
+//import com.fasterxml.jackson.annotation.JsonProperty;
+//import java.util.List;
 
 @Data
 public class FormularioMedicao {

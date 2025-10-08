@@ -33,7 +33,7 @@ const Dashboard: React.FC = () => {
          <i className={`fas ${isMenuOpen ? 'fa-angle-left' : 'fa-angle-right'}`}></i>
        </button>
 
-       {isMenuOpen && <h1 className="logo-text">Dashboard</h1>}
+       {isMenuOpen && <h1 className="logo-text">MENU</h1>}
 
        <nav className="menu-nav">
          <ul>

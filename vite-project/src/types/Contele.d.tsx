@@ -2,7 +2,8 @@
 // INTERFACES E TIPOS DA API CONTELE
 // =========================================================================
 
-export type TabName = 'Standard' | 'Photos' | 'Videos' | 'Observations' | '';
+export type TabName = 'Standard' | 'Photos' | 'Videos' | 'Observations'; // Removendo o '| ""'
+
 
 export interface Answer {
     id: string;
