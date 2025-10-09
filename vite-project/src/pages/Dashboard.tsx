@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 // SEPARAÇÃO DE IMPORTS:
 import { checkPermission } from '../hooks/usePermissions'; 
-import type { PermittedRouteProps } from '../types/Contele.d'; // Importa o tipo da definição global
+import type { PermittedRouteProps } from '../types/Contele.d';
+import UserAvatar from '../components/UserAvatar'; // 👈 1. IMPORT DO NOVO COMPONENTE
 import '../styles/Dashboard.css';
 
 const Dashboard: React.FC = () => {
@@ -12,9 +13,9 @@ const Dashboard: React.FC = () => {
     const navigate = useNavigate();
 
     // --- Checagem de Permissões ---
-    // A tipagem é resolvida pelo casting para o tipo importado.
     const hasChecklistPermission = checkPermission('CKL' as PermittedRouteProps);
-    const hasOrderPermission = checkPermission('PED' as PermittedRouteProps); 
+    const hasOrderPermission = checkPermission('PED' as PermittedRouteProps);
+    const hasArmazemPermission = checkPermission('ARM' as PermittedRouteProps); 
 
     const toggleMenu = () => {
       setIsMenuOpen(!isMenuOpen);
@@ -23,20 +24,26 @@ const Dashboard: React.FC = () => {
     const handleLogout = () => {
       localStorage.removeItem('userToken');
       localStorage.removeItem('userPermissions');
-       navigate('/');
+      localStorage.removeItem('user'); // É bom remover o objeto 'user' também
+        navigate('/');
     };
 
     return (
      <div className="dashboard-container">
       <div className={`sidebar ${isMenuOpen ? '' : 'collapsed'}`}>
        <button onClick={toggleMenu} className="toggle-menu-button">
-         <i className={`fas ${isMenuOpen ? 'fa-angle-left' : 'fa-angle-right'}`}></i>
+          <i className={`fas ${isMenuOpen ? 'fa-angle-left' : 'fa-angle-right'}`}></i>
        </button>
-
-       {isMenuOpen && <h1 className="logo-text">MENU</h1>}
+        
+        {/* Bloco do Avatar e Nome - 2. INCLUSÃO DO AVATAR */}
+        <div className="user-info-wrapper">
+            <UserAvatar />
+            {isMenuOpen && <h1 className="logo-text">MENU</h1>}
+        </div>
+        {/* FIM Bloco do Avatar e Nome */}
 
        <nav className="menu-nav">
-         <ul>
+          <ul>
             {/* ITEM FIXO: HOME */}
             <li data-tooltip="Home">
             <Link to="/dashboard" className="menu-item">
@@ -44,38 +51,48 @@ const Dashboard: React.FC = () => {
             </Link>
            </li>
 
-           {/* ITEM CONDICIONAL: CONSULTAR CHECKLIST (Permissão CKL) */}
+            {/* ITEM CONDICIONAL: CONSULTAR CHECKLIST (Permissão CKL) */}
              {hasChecklistPermission && (
              <li data-tooltip="Consultar Checklist">
             <Link to="/dashboard/consultar-checklist" className="menu-item">
-                 <i className="fas fa-clipboard-list"></i> <span>Consultar Checklist</span>
+                <i className="fas fa-clipboard-list"></i> <span>Consultar Checklist</span>
             </Link>
-            </li>
-         )}
+             </li>
+          )}
 
-             {/* ITEM CONDICIONAL: CONSULTAR PEDIDO (Permissão PED) */}
+            {/* ITEM CONDICIONAL: CONSULTAR PEDIDO (Permissão PED) */}
              {hasOrderPermission && (
             <li data-tooltip="Consultar Pedido">
                <Link to="/dashboard/consultar-pedido" className="menu-item">
-                  <i className="fas fa-search"></i> <span>Consultar Pedido</span>
+                 <i className="fas fa-search"></i> <span>Consultar Pedido</span>
                </Link>
            </li>
              )}
-           </ul>
-         </nav>
 
-       <div className="logout-button-wrapper" data-tooltip="Sair da conta">
+            {/* ITEM CONDICIONAL: CONSULTAR ARMAZÉM (Permissão ARM) */}
+            {hasArmazemPermission && (
+            <li data-tooltip="Consultar Armazém">
+               <Link to="/dashboard/consultar-armazém" className="menu-item">
+                 <i className="fas fa-warehouse"></i> <span>Consultar Armazém</span>
+               </Link>
+           </li>
+             )}
+           
+          </ul>
+        </nav>
+
+        <div className="logout-button-wrapper" data-tooltip="Sair da conta">
           <button className="logout-button" onClick={handleLogout}>
             <i className="fas fa-sign-out-alt"></i> <span>Sair da conta</span>
-         </button>
-          </div>
-       </div>
+          </button>
+           </div>
+        </div>
 
-      <div className={`main-content ${isMenuOpen ? '' : 'menu-closed'}`}>
-         <Outlet />
-     </div>
-      </div>
- );
+       <div className={`main-content ${isMenuOpen ? '' : 'menu-closed'}`}>
+          <Outlet />
+       </div>
+       </div>
+    );
 };
 
 export default Dashboard;

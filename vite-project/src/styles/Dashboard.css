@@ -238,3 +238,106 @@
 .main-content.menu-closed {
   padding-left: 60px;
 }
+
+
+/*
+  =============================================================
+  ESTILOS PARA O AVATAR DO USUÁRIO (NOVOS)
+  =============================================================
+*/
+
+/* Wrapper do Avatar e Nome */
+.user-info-wrapper {
+    /* Container que engloba o Avatar/Nome e o Título "MENU" */
+    padding: 15px 15px 15px 15px; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column; /* OK: Organiza Avatar e Menu verticalmente */
+    align-items: center;    /* NOVO: Centraliza o wrapper do avatar */
+    position: relative;
+}
+
+/* Garante que o título "MENU" fique centralizado */
+.logo-text {
+    margin: 15px 0 0; /* Aumenta o espaçamento abaixo do nome do usuário */
+    width: 100%;
+    text-align: center;
+}
+
+/* Container que envolve o círculo e o nome */
+.user-avatar-container {
+    width: 100%; /* Ocupa 100% da largura do user-info-wrapper */
+    display: flex;
+    /* MUDANÇA PRINCIPAL: Agora o conteúdo é vertical */
+    flex-direction: column; 
+    align-items: center;    /* Centraliza o Avatar/Nome no container */
+    padding: 0; 
+    margin-bottom: 0; 
+    cursor: default;
+    color: #ffffff; 
+    transition: background-color 0.3s;
+    position: relative; 
+}
+
+/* Quando o menu está colapsado, a aparência é mantida (centralizado) */
+.sidebar.collapsed .user-info-wrapper {
+    align-items: center;
+    padding: 15px 0 15px 0;
+}
+
+.sidebar.collapsed .user-avatar-container {
+    justify-content: center;
+    width: 40px; 
+    margin: 5px auto;
+}
+
+/* O círculo com as iniciais */
+.user-initials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #3498db; 
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+/* Wrapper do nome do usuário (texto) */
+.user-name-wrapper {
+    flex-grow: 0; /* Não precisa mais crescer horizontalmente */
+    margin-left: 0;
+    margin-top: 5px; /* NOVO: Espaçamento entre o círculo e o nome */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 1.2; 
+    /* NOVO: Garante que o texto fique centralizado horizontalmente */
+    text-align: center; 
+}
+
+/* Esconde o nome do usuário no estado colapsado (mantendo a regra existente) */
+.sidebar.collapsed .user-name-wrapper {
+    display: none;
+}
+
+/* Regra para o tooltip no modo colapsado (MANTIDA) */
+.sidebar.collapsed .user-avatar-container:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #34495e;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 200;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 1;
+}

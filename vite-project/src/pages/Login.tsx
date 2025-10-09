@@ -64,9 +64,9 @@ const Login: React.FC = () => {
             // 2️⃣ Troca de senha obrigatória
             if (userData.trocar_senha === 'S') {
                 localStorage.setItem('userToken', authorizationHeader);
-                
-                // 🚨 CORREÇÃO 1: Salva o objeto do usuário antes de navegar para Trocar Senha
                 localStorage.setItem('user', JSON.stringify(userData)); 
+                
+                localStorage.setItem('username', cleanUsername); // 👈 ADICIONE AQUI
                 
                 login(); 
                 navigate('/trocar-senha');

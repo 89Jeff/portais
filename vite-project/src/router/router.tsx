@@ -6,6 +6,7 @@ import Dashboard from '../pages/Dashboard';
 import DashboardHome from '../pages/DashboardHome';
 import ConsultarPedido from '../pages/ConsultarPedido';
 import ConsultarChecklist from '../pages/ConsultarChecklist';
+import ConsultarArmazem from '../pages/ConsultarArmazem';
 import TrocarSenha from '../pages/TrocarSenha';
 
 // Importações dos Guards e Wrappers
@@ -39,6 +40,14 @@ export const router = createBrowserRouter([
                                 children: [{ 
                                     path: 'consultar-pedido', 
                                     element: <ConsultarPedido /> 
+                                }],
+                            },
+
+                            {
+                                element: <PermittedRoute requiredPermission="ARM" />, // 2️⃣ Protege por permissão
+                                children: [{ 
+                                    path: 'consultar-armazém', 
+                                    element: <ConsultarArmazem /> 
                                 }],
                             },
                             
