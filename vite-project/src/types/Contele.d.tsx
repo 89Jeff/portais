@@ -87,3 +87,13 @@
         poi: POI; 
         userData: UserDetail; 
     }
+
+    export interface ChecklistTotvs {
+        cod: string;
+        cffilial: string;
+        tipo: string;
+        vendedor: string;
+        cliente: string;
+        pedido: string;
+        status: string; 
+    }

@@ -40,6 +40,7 @@ const ConsultarChecklist: React.FC = () => {
     const theme = useTheme(); 
     
     const {
+        checklist,
         visita, 
         loading: isLoading,
         error, 
@@ -113,9 +114,43 @@ const ConsultarChecklist: React.FC = () => {
             </Paper>
             
             {/* Conteúdo Principal */}
+
+            {/* Conteúdo Checklist */}
+            {checklist && (
+              <>
+                <Paper elevation={4} sx={{ p: { xs: 2, md: 4 }, mb: 4, borderRadius: 2 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', mb: 2 }}>
+                        <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.primary.dark, mb: { xs: 1, md: 0 } }}>
+                            <Person sx={{ mr: 1, verticalAlign: 'middle' }} />
+                            Cliente: {checklist?.cliente}
+                        </Typography>
+                    </Box>
+                    
+                    <Divider sx={{ my: 2 }} />
+                    
+                    <Grid container spacing={3}>
+                        <CustomGridItem xs={12} sm={12} md={3}>
+                            <Typography variant="body1">
+                                <strong>N° de Checklist:</strong> {checklist?.cod}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Vendedor:</strong> {checklist?.vendedor}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Produto:</strong> {checklist?.tipo}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Pedido:</strong> {checklist?.pedido}
+                            </Typography>
+                        </CustomGridItem>
+                    </Grid>
+                </Paper>
+              </>
+            )}
+
+            {/* Detalhes da Visita */}
             {visita && (
                 <>
-                {/* Detalhes da Visita */}
                 <Paper elevation={4} sx={{ p: { xs: 2, md: 4 }, mb: 4, borderRadius: 2 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', mb: 2 }}>
                         
@@ -124,33 +159,22 @@ const ConsultarChecklist: React.FC = () => {
                             Cliente: {visita.poi.name}
                         </Typography>
                         
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="body1" sx={{ fontWeight: 600, color: theme.palette.text.primary, mr: 1 }}>
-                                Status da Visita:
-                            </Typography>
-                            <Chip label={visita.status.toUpperCase()} color={statusColor as 'primary'|'success'} sx={{ fontWeight: 'bold' }} />
-                        </Box>
                     </Box>
                     
                     <Divider sx={{ my: 2 }} />
                     
                     <Grid container spacing={3}>
                         <CustomGridItem xs={12}>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <LocationOn color="action" sx={{ mr: 1 }} />
-                                <Typography variant="body1">
+                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                 <LocationOn color="action" sx={{ mr: 1 }} />
+                                 <Typography variant="body1">
                                     <strong>Endereço:</strong> {visita.poi.address.street}, {visita.poi.address.number}, {visita.poi.address.city} - {visita.poi.address.state}
-                                </Typography>
-                            </Box>
+                                 </Typography>
+                             </Box>
                         </CustomGridItem>
-                        
-                        <Divider sx={{ width: '100%', my: 1, mx: 3 }} /> 
-                        
-                        <CustomGridItem xs={12} md={4}>
-                            <Typography variant="body1">
-                                <strong>Empresa:</strong> <Chip label={tagName} size="small" variant="outlined" />
-                            </Typography>
-                        </CustomGridItem>
+
+                        <Divider sx={{ width: '100%', my: 1, mx: 3 }} />
+
                         <CustomGridItem xs={12} md={4}>
                             <Typography variant="body1">
                                 <strong>N° OS (Contele):</strong> {visita.os}
@@ -184,6 +208,15 @@ const ConsultarChecklist: React.FC = () => {
                             <Typography variant="body1">
                                 <strong>Duração Total:</strong> <Chip label={calcularDuracao(visita.checkinTime, visita.checkoutTime)} color="info" size="small" />
                             </Typography>
+                        </CustomGridItem>
+
+                        <CustomGridItem xs={12} sm={12} md={3}>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <Typography variant="body1" sx={{ fontWeight: 600, color: theme.palette.text.primary, mr: 1 }}>
+                                  Status da Visita:
+                              </Typography>
+                              <Chip label={visita.status.toUpperCase()} color={statusColor as 'primary'|'success'} sx={{ fontWeight: 'bold' }} />
+                          </Box>
                         </CustomGridItem>
                     </Grid>
                 </Paper>
