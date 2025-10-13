@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { categorizeAnswers } from '../utils/ChecklistUtils'; // Já existe
-import type { Tarefa, Form, Segment, Answer } from '../types/Contele.d'; 
+import type { Tarefa, Form, Segment, Answer, ChecklistTotvs } from '../types/Contele.d'; 
 
 // ----------------------------------------------------
 // CONSTANTES
@@ -10,6 +10,7 @@ import type { Tarefa, Form, Segment, Answer } from '../types/Contele.d';
 // Nota: Ajuste a porta se necessário, mas 8080 é comum para APIs de backend.
 const API_BASE_URL = 'http://localhost:8080/api/v1/contele'; 
 const INITIAL_STATE = {
+    checklist: null as ChecklistTotvs | null,
     visita: null as Tarefa | null,
     formularios: null as Form[] | null,
     loading: false,
@@ -25,7 +26,7 @@ export const useChecklistData = () => {
     const [osToSearch, setOsToSearch] = useState('');
     const navigate = useNavigate();
 
-    const { visita, formularios, loading, error } = state;
+    const { checklist, visita, formularios, loading, error } = state;
 
     // Ações de erro (Reutiliza a lógica de autenticação do componente anterior)
     const handleAuthError = (message: string) => {
@@ -54,52 +55,98 @@ export const useChecklistData = () => {
             'Content-Type': 'application/json'
         };
 
-        setState(prev => ({ ...prev, loading: true, error: '', formularios: null, visita: null }));
+        setState(prev => ({ ...prev, loading: true, error: '', checklist: null, formularios: null, visita: null }));
 
-        try {
-            // 1. Buscar dados da OS (Tarefa)
-            const visitaResponse = await axios.get<Tarefa>(
-                `${API_BASE_URL}/tarefas/totvs/${os}`,
-                { headers: authHeader }
-            );
-            const visitaData = visitaResponse.data;
+        //
+        // BUSCA CHECKLIST NO TOTVS
+        // 
+        // 1. Veririca se checklist existe no protheus
+        const codigoEmpresa = (import.meta.env.VITE_EMPRESA_CODIGO || "") as string;
+        if (codigoEmpresa === "") {
+          throw new Error('VITE_EMPRESA_CODIGO não está definido nas variáveis de ambiente.');
+        }
+        axios.get<ChecklistTotvs>(
+            `/portal/checklist?empresa=${codigoEmpresa}&checklist=${os}`,
+            { headers: authHeader }
+        )
+        // Existe
+        .then(async (response) => {
+            const checklistData = response.data;
+            setState((prev)=> (
+              { 
+                ...prev, 
+                checklist: checklistData,
+              })); 
 
-            // VERIFICAÇÃO E DECLARAÇÃO DA VARIÁVEL FALTANTE (CORREÇÃO AQUI)
-            if (!visitaData || !visitaData.id) {
-                 throw new Error(`Não foi possível obter o ID da visita para a OS ${os}.`);
+            //
+            // BUSCA VISITA NO CONTELE
+            // 
+            try {
+                // 1. Buscar dados da OS (Tarefa)
+                const visitaResponse = await axios.get<Tarefa>(
+                    `${API_BASE_URL}/tarefas/totvs/${os}`,
+                    { headers: authHeader }
+                );
+                const visitaData = visitaResponse.data;
+
+                // VERIFICAÇÃO E DECLARAÇÃO DA VARIÁVEL FALTANTE (CORREÇÃO AQUI)
+                if (!visitaData || !visitaData.id) {
+                     throw new Error(`Não foi possível obter o ID da visita para a OS ${os}.`);
+                }
+                const idDaVisita = visitaData.id;
+                // 2. Buscar respostas do Formulário
+                const formsResponse = await axios.get<{ forms: Form[] }>(
+                    `${API_BASE_URL}/formularios/visita/${idDaVisita}`,
+                    { headers: authHeader }
+                );
+                const formulariosData = formsResponse.data.forms;
+
+                setState({
+                    checklist: checklistData,
+                    visita: visitaData,
+                    formularios: formulariosData,
+                    loading: false,
+                    error: '',
+                });
+
+            } catch (err) {
+                let errorMessage = 'Erro ao buscar dados do Checklist no Contele';
+                if (axios.isAxiosError(err)) {
+                    if (err.response?.status === 404) {
+                        errorMessage = `OS ${os} não possui visita agendada.`;
+                    } else if (err.response?.status === 401 || err.response?.status === 403) {
+                        handleAuthError('Sessão expirada. Faça login novamente.');
+                        return; // Sai da função após o erro de autenticação
+                    } else if (err.response) {
+                        errorMessage = `Erro do servidor: ${err.response.status} - ${err.response.statusText}`;
+                    } else {
+                        errorMessage = `Erro de rede ou conexão: ${err.message}`;
+                    }
+                }
+                throw errorMessage;
             }
-            const idDaVisita = visitaData.id;
-            // 2. Buscar respostas do Formulário
-            const formsResponse = await axios.get<{ forms: Form[] }>(
-                `${API_BASE_URL}/formularios/visita/${idDaVisita}`,
-                { headers: authHeader }
-            );
-            const formulariosData = formsResponse.data.forms;
-
-            setState({
-                visita: visitaData,
-                formularios: formulariosData,
-                loading: false,
-                error: '',
-            });
-
-        } catch (err) {
-            let errorMessage = 'Erro ao buscar dados do Checklist.';
+        })
+        // Não existe ou erro de conexão
+        .catch(err => {
+            let errorMessage = 'Erro ao buscar dados do Checklist no TOTVS';
+            if(typeof err === 'string') {
+                errorMessage = err;
+            }
             if (axios.isAxiosError(err)) {
                 if (err.response?.status === 404) {
-                    errorMessage = `OS ${os} não encontrada ou não possui Checklist.`;
+                    errorMessage = `OS ${os} não existe no TOTVS.`;
                 } else if (err.response?.status === 401 || err.response?.status === 403) {
                     handleAuthError('Sessão expirada. Faça login novamente.');
                     return; // Sai da função após o erro de autenticação
                 } else if (err.response) {
-                    errorMessage = `Erro do servidor: ${err.response.status} - ${err.response.statusText}`;
+                    errorMessage += ` (${err.response.status} - ${err.response.statusText})`;
                 } else {
-                    errorMessage = `Erro de rede ou conexão: ${err.message}`;
+                    errorMessage += ` (Erro de rede ou conexão: ${err.message})`;
                 }
             }
-            console.error(err);
+            console.error(errorMessage);
             setState(prev => ({ ...prev, loading: false, error: errorMessage }));
-        }
+        });
     }, [navigate]);
 
     // Lógica de Processamento de Dados (usa useMemo para otimizar)
@@ -133,6 +180,7 @@ export const useChecklistData = () => {
 
     return {
         // Estado
+        checklist,
         visita,
         loading,
         error,
